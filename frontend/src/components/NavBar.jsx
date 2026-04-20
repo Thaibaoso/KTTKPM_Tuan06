@@ -6,7 +6,7 @@ function NavBar() {
 
   return (
     <nav className="nav">
-      <strong>Mini Food Ordering</strong>
+      <strong className="brand-mark">Mini Food Ordering</strong>
       <NavLink className={({ isActive }) => (isActive ? 'current' : '')} to="/auth">
         Login/Register
       </NavLink>
@@ -19,7 +19,7 @@ function NavBar() {
       <NavLink className={({ isActive }) => (isActive ? 'current' : '')} to="/checkout">
         Checkout
       </NavLink>
-      <span style={{ marginLeft: 'auto' }}>{user ? `User: ${user.username}` : 'Not logged in'}</span>
+      <span className="nav-spacer nav-user">{user ? `User: ${user.username}` : 'Not logged in'}</span>
       {user && (
         <button type="button" className="alt" onClick={logout}>
           Logout
