@@ -142,53 +142,55 @@ function LoginRegisterPage() {
   return (
     <AuthLayout>
       <div className={`auth-layout__forms ${user ? 'auth-layout__forms--single' : ''}`}>
-        <section className="card stack form-card">
-          <h2>Đăng ký</h2>
-          <p className="section-subtitle">Tạo tài khoản dùng thử để kiểm tra luồng đặt món và thanh toán.</p>
-          <form className="stack" onSubmit={onRegister} noValidate>
-            <label className="field">
-              <span>Tên đăng nhập</span>
-              <input
-                placeholder="Nhập tên đăng nhập"
-                value={registerForm.username}
-                onChange={(e) => updateRegisterField('username', e.target.value)}
-                onBlur={() => handleRegisterBlur('username')}
-                className={registerTouched.username && registerErrors.username ? 'input-error' : ''}
-                aria-invalid={Boolean(registerTouched.username && registerErrors.username)}
-              />
-              <small className={registerTouched.username && registerErrors.username ? 'helper helper-error' : 'helper'}>
-                {helperText(registerTouched.username, registerErrors.username)}
-              </small>
-            </label>
-            <label className="field">
-              <span>Mật khẩu</span>
-              <input
-                placeholder="Nhập mật khẩu"
-                type="password"
-                value={registerForm.password}
-                onChange={(e) => updateRegisterField('password', e.target.value)}
-                onBlur={() => handleRegisterBlur('password')}
-                className={registerTouched.password && registerErrors.password ? 'input-error' : ''}
-                aria-invalid={Boolean(registerTouched.password && registerErrors.password)}
-              />
-              <small className={registerTouched.password && registerErrors.password ? 'helper helper-error' : 'helper'}>
-                {helperText(registerTouched.password, registerErrors.password)}
-              </small>
-            </label>
-            <label className="field">
-              <span>Vai trò</span>
-              <select value={registerForm.role} onChange={(e) => updateRegisterField('role', e.target.value)}>
-                <option value="USER">Người dùng</option>
-                <option value="ADMIN">Quản trị viên</option>
-              </select>
-            </label>
-            <button type="submit" disabled={registerSubmitting}>
-              {registerSubmitting && <span className="spinner" aria-hidden="true" />}
-              <span>{registerSubmitting ? 'Đang đăng ký...' : 'Đăng ký'}</span>
-            </button>
-            <p className={statusClass(registerStatusTone)}>{registerStatus || emptyLine}</p>
-          </form>
-        </section>
+        {!user && (
+          <section className="card stack form-card">
+            <h2>Đăng ký</h2>
+            <p className="section-subtitle">Tạo tài khoản dùng thử để kiểm tra luồng đặt món và thanh toán.</p>
+            <form className="stack" onSubmit={onRegister} noValidate>
+              <label className="field">
+                <span>Tên đăng nhập</span>
+                <input
+                  placeholder="Nhập tên đăng nhập"
+                  value={registerForm.username}
+                  onChange={(e) => updateRegisterField('username', e.target.value)}
+                  onBlur={() => handleRegisterBlur('username')}
+                  className={registerTouched.username && registerErrors.username ? 'input-error' : ''}
+                  aria-invalid={Boolean(registerTouched.username && registerErrors.username)}
+                />
+                <small className={registerTouched.username && registerErrors.username ? 'helper helper-error' : 'helper'}>
+                  {helperText(registerTouched.username, registerErrors.username)}
+                </small>
+              </label>
+              <label className="field">
+                <span>Mật khẩu</span>
+                <input
+                  placeholder="Nhập mật khẩu"
+                  type="password"
+                  value={registerForm.password}
+                  onChange={(e) => updateRegisterField('password', e.target.value)}
+                  onBlur={() => handleRegisterBlur('password')}
+                  className={registerTouched.password && registerErrors.password ? 'input-error' : ''}
+                  aria-invalid={Boolean(registerTouched.password && registerErrors.password)}
+                />
+                <small className={registerTouched.password && registerErrors.password ? 'helper helper-error' : 'helper'}>
+                  {helperText(registerTouched.password, registerErrors.password)}
+                </small>
+              </label>
+              <label className="field">
+                <span>Vai trò</span>
+                <select value={registerForm.role} onChange={(e) => updateRegisterField('role', e.target.value)}>
+                  <option value="USER">Người dùng</option>
+                  <option value="ADMIN">Quản trị viên</option>
+                </select>
+              </label>
+              <button type="submit" disabled={registerSubmitting}>
+                {registerSubmitting && <span className="spinner" aria-hidden="true" />}
+                <span>{registerSubmitting ? 'Đang đăng ký...' : 'Đăng ký'}</span>
+              </button>
+              <p className={statusClass(registerStatusTone)}>{registerStatus || emptyLine}</p>
+            </form>
+          </section>
+        )}
 
         {!user ? (
           <section className="card stack form-card">
