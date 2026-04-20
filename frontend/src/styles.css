@@ -1,0 +1,255 @@
+:root {
+  --bg-1: #f7efe5;
+  --bg-2: #f7d7b5;
+  --ink: #211914;
+  --brand: #c4472d;
+  --accent: #175f67;
+  --card: rgba(255, 250, 241, 0.92);
+  --line: rgba(92, 60, 28, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: radial-gradient(circle at 15% 15%, #ffeec2 0, transparent 45%),
+    radial-gradient(circle at 85% 10%, #ffd4a8 0, transparent 40%),
+    linear-gradient(160deg, var(--bg-1), var(--bg-2));
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  margin-top: 0;
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(33, 32, 31, 0.15);
+  background: rgba(255, 248, 237, 0.9);
+  backdrop-filter: blur(6px);
+}
+
+.nav a {
+  text-decoration: none;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.nav .current {
+  color: var(--brand);
+}
+
+.page-wrap {
+  max-width: 980px;
+  margin: 24px auto;
+  padding: 0 16px 36px;
+}
+
+.page-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.auth-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.full-span {
+  grid-column: 1 / -1;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 8px 24px rgba(53, 31, 14, 0.08);
+  backdrop-filter: blur(8px);
+}
+
+.hero {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding: 24px;
+  min-height: 100%;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 3vw, 3.2rem);
+  line-height: 1.02;
+  margin-bottom: 0;
+}
+
+.compact {
+  padding: 18px 20px;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.lede {
+  max-width: 60ch;
+  margin: 0;
+  color: rgba(33, 25, 20, 0.78);
+}
+
+.status-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  border-radius: 999px;
+  padding: 8px 10px;
+  background: rgba(23, 95, 103, 0.08);
+  color: var(--accent);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+.food-grid {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
+.food-card {
+  min-height: 100%;
+}
+
+input,
+select,
+button {
+  font: inherit;
+}
+
+input,
+select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #fff;
+  color: var(--ink);
+}
+
+button {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--brand);
+  color: #fff;
+  transition: transform 140ms ease, box-shadow 140ms ease, opacity 140ms ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(196, 71, 45, 0.18);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+  box-shadow: none;
+}
+
+button.alt {
+  background: var(--accent);
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.spread {
+  justify-content: space-between;
+}
+
+.stack {
+  display: grid;
+  gap: 10px;
+}
+
+.notice {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #fff3de;
+  border: 1px solid #f0d3a0;
+}
+
+.cart-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.cart-row p {
+  margin: 4px 0 0;
+  color: rgba(33, 25, 20, 0.7);
+}
+
+.quantity-input {
+  max-width: 96px;
+}
+
+.total-row {
+  padding-top: 8px;
+}
+
+@media (max-width: 640px) {
+  .nav {
+    flex-wrap: wrap;
+  }
+
+  .auth-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cart-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
