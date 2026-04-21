@@ -1,6 +1,8 @@
 package com.mini.orderservice.client;
 
 import com.mini.orderservice.dto.UserDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -13,6 +15,7 @@ import java.util.List;
 @Component
 public class UserClient {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserClient.class);
     private final RestTemplate restTemplate;
     private final String userServiceBaseUrl;
 
@@ -23,6 +26,7 @@ public class UserClient {
     }
 
     public boolean userExists(Long userId) {
+        logger.info("[COMMUNICATION] order-service -> user-service: Checking if user exists for userId: {}", userId);
         ResponseEntity<List<UserDto>> response = restTemplate.exchange(
                 userServiceBaseUrl + "/users",
                 HttpMethod.GET,

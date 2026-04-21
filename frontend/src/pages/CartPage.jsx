@@ -5,22 +5,21 @@ function CartPage() {
 
   return (
     <div className="stack">
-      <section className="card hero compact">
-        <p className="eyebrow">Local Cart</p>
-        <h1>Cart</h1>
-        <p className="lede">Cart state stays in the browser until checkout creates an order.</p>
+      <section className="hero">
+        <h1>Giỏ Hàng Của Bạn</h1>
+        <p className="lede">Xem lại danh sách món ăn bạn đã chọn trước khi tiến hành thanh toán.</p>
       </section>
 
       <section className="card stack">
         {items.length === 0 ? (
-          <p>Your cart is empty. Add food from the menu.</p>
+          <p>Giỏ hàng của bạn đang trống. Hãy quay lại Thực đơn để chọn món nhé.</p>
         ) : (
           <>
             {items.map((item) => (
               <div className="cart-row" key={item.foodId}>
                 <div>
                   <strong>{item.name}</strong>
-                  <p>${item.price.toFixed(2)} each</p>
+                  <p>${item.price.toFixed(2)} / món</p>
                 </div>
                 <input
                   className="quantity-input"
@@ -32,11 +31,11 @@ function CartPage() {
               </div>
             ))}
             <div className="row spread total-row">
-              <strong>Total</strong>
-              <strong>${total.toFixed(2)}</strong>
+              <strong>Tổng cộng</strong>
+              <strong style={{ color: 'var(--brand)', fontSize: '1.5rem' }}>${total.toFixed(2)}</strong>
             </div>
             <button type="button" className="alt" onClick={clearCart}>
-              Clear Cart
+              Xóa Giỏ Hàng
             </button>
           </>
         )}

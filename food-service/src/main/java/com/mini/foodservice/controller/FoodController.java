@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -31,18 +32,22 @@ public class FoodController {
     }
 
     @PostMapping("/foods")
-    public ResponseEntity<FoodResponse> createFood(@RequestBody FoodRequest request) {
-        return ResponseEntity.ok(foodService.createFood(request));
+    public ResponseEntity<FoodResponse> createFood(@RequestHeader("X-User-Id") Long userId,
+                                                   @RequestBody FoodRequest request) {
+        return ResponseEntity.ok(foodService.createFood(userId, request));
     }
 
     @PutMapping("/foods/{id}")
-    public ResponseEntity<FoodResponse> updateFood(@PathVariable Long id, @RequestBody FoodRequest request) {
-        return ResponseEntity.ok(foodService.updateFood(id, request));
+    public ResponseEntity<FoodResponse> updateFood(@RequestHeader("X-User-Id") Long userId,
+                                                   @PathVariable Long id,
+                                                   @RequestBody FoodRequest request) {
+        return ResponseEntity.ok(foodService.updateFood(userId, id, request));
     }
 
     @DeleteMapping("/foods/{id}")
-    public ResponseEntity<Map<String, String>> deleteFood(@PathVariable Long id) {
-        foodService.deleteFood(id);
+    public ResponseEntity<Map<String, String>> deleteFood(@RequestHeader("X-User-Id") Long userId,
+                                                          @PathVariable Long id) {
+        foodService.deleteFood(userId, id);
         return ResponseEntity.ok(Map.of("message", "Food deleted"));
     }
 

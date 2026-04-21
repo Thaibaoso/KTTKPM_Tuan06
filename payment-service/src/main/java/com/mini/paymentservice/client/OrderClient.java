@@ -2,6 +2,8 @@ package com.mini.paymentservice.client;
 
 import com.mini.paymentservice.dto.OrderDto;
 import com.mini.paymentservice.dto.UpdateOrderStatusRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -10,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class OrderClient {
 
+    private static final Logger logger = LoggerFactory.getLogger(OrderClient.class);
     private final RestTemplate restTemplate;
     private final String orderServiceBaseUrl;
 
@@ -28,6 +31,7 @@ public class OrderClient {
     }
 
     public void markOrderAsPaid(Long orderId) {
+        logger.info("[COMMUNICATION] payment-service -> order-service: Updating order status to PAID for orderId: {}", orderId);
         restTemplate.put(
                 orderServiceBaseUrl + "/orders/" + orderId + "/status",
                 new UpdateOrderStatusRequest("PAID")

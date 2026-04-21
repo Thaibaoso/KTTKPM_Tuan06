@@ -5,6 +5,7 @@ public class FoodRequest {
     private String name;
     private String description;
     private double price;
+    private String imageUrl;
 
     public String getName() {
         return name;
@@ -28,5 +29,13 @@ public class FoodRequest {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

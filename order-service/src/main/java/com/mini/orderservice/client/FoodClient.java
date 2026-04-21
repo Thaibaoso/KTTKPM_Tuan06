@@ -1,6 +1,8 @@
 package com.mini.orderservice.client;
 
 import com.mini.orderservice.dto.FoodDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -14,6 +16,7 @@ import java.util.Optional;
 @Component
 public class FoodClient {
 
+    private static final Logger logger = LoggerFactory.getLogger(FoodClient.class);
     private final RestTemplate restTemplate;
     private final String foodServiceBaseUrl;
 
@@ -24,6 +27,7 @@ public class FoodClient {
     }
 
     public Optional<FoodDto> findFoodById(Long foodId) {
+        logger.info("[COMMUNICATION] order-service -> food-service: Fetching food details for foodId: {}", foodId);
         ResponseEntity<List<FoodDto>> response = restTemplate.exchange(
                 foodServiceBaseUrl + "/foods",
                 HttpMethod.GET,

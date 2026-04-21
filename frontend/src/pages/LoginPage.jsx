@@ -1,14 +1,10 @@
 import { useState } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 import { userApi } from '../api/http';
 import { useAuth } from '../context/AuthContext';
 import AuthLayout from '../components/layout/AuthLayout';
 
 const isBlank = (value) => value.trim().length === 0;
-
-const validateRegister = (form) => ({
-  username: isBlank(form.username) ? 'Vui lòng nhập tên đăng nhập.' : '',
-  password: form.password.length < 6 ? 'Mật khẩu phải có ít nhất 6 ký tự.' : '',
-});
 
 const validateLogin = (form) => ({
   username: isBlank(form.username) ? 'Vui lòng nhập tên đăng nhập.' : '',
@@ -17,33 +13,14 @@ const validateLogin = (form) => ({
 
 const emptyLine = '\u00a0';
 
-function LoginRegisterPage() {
+function LoginPage() {
   const { user, login, logout } = useAuth();
-  const [registerForm, setRegisterForm] = useState({ username: '', password: '', role: 'USER' });
   const [loginForm, setLoginForm] = useState({ username: '', password: '' });
-  const [registerTouched, setRegisterTouched] = useState({ username: false, password: false });
   const [loginTouched, setLoginTouched] = useState({ username: false, password: false });
-  const [registerErrors, setRegisterErrors] = useState({ username: '', password: '' });
   const [loginErrors, setLoginErrors] = useState({ username: '', password: '' });
-  const [registerSubmitting, setRegisterSubmitting] = useState(false);
   const [loginSubmitting, setLoginSubmitting] = useState(false);
-  const [registerStatus, setRegisterStatus] = useState('');
   const [loginStatus, setLoginStatus] = useState('');
-  const [registerStatusTone, setRegisterStatusTone] = useState('idle');
   const [loginStatusTone, setLoginStatusTone] = useState('idle');
-
-  const updateRegisterField = (field, value) => {
-    const nextForm = { ...registerForm, [field]: value };
-    const nextErrors = validateRegister(nextForm);
-
-    setRegisterForm(nextForm);
-    setRegisterErrors((current) => ({
-      ...current,
-      [field]: registerTouched[field] ? nextErrors[field] : '',
-    }));
-    setRegisterStatus('');
-    setRegisterStatusTone('idle');
-  };
 
   const updateLoginField = (field, value) => {
     const nextForm = { ...loginForm, [field]: value };
@@ -58,45 +35,9 @@ function LoginRegisterPage() {
     setLoginStatusTone('idle');
   };
 
-  const handleRegisterBlur = (field) => {
-    setRegisterTouched((current) => ({ ...current, [field]: true }));
-    setRegisterErrors(validateRegister(registerForm));
-  };
-
   const handleLoginBlur = (field) => {
     setLoginTouched((current) => ({ ...current, [field]: true }));
     setLoginErrors(validateLogin(loginForm));
-  };
-
-  const onRegister = async (event) => {
-    event.preventDefault();
-
-    const nextTouched = { username: true, password: true };
-    const nextErrors = validateRegister(registerForm);
-
-    setRegisterTouched(nextTouched);
-    setRegisterErrors(nextErrors);
-
-    if (nextErrors.username || nextErrors.password) {
-      setRegisterStatus('Vui lòng sửa các trường được đánh dấu.');
-      setRegisterStatusTone('error');
-      return;
-    }
-
-    setRegisterSubmitting(true);
-    setRegisterStatus('');
-    setRegisterStatusTone('idle');
-
-    try {
-      const response = await userApi.post('/register', registerForm);
-      setRegisterStatus(`Đã đăng ký: ${response.data.username}.`);
-      setRegisterStatusTone('success');
-    } catch (error) {
-      setRegisterStatus(error.response?.data?.error || 'Đăng ký thất bại.');
-      setRegisterStatusTone('error');
-    } finally {
-      setRegisterSubmitting(false);
-    }
   };
 
   const onLogin = async (event) => {
@@ -139,68 +80,24 @@ function LoginRegisterPage() {
     return 'status-line';
   };
 
+  if (user) {
+    return <Navigate to="/foods" replace />;
+  }
+
   return (
     <AuthLayout>
-      <div className={`auth-layout__forms ${user ? 'auth-layout__forms--single' : ''}`}>
-        {!user && (
-          <section className="card stack form-card">
-            <h2>Đăng ký</h2>
-            <p className="section-subtitle">Tạo tài khoản dùng thử để kiểm tra luồng đặt món và thanh toán.</p>
-            <form className="stack" onSubmit={onRegister} noValidate>
-              <label className="field">
-                <span>Tên đăng nhập</span>
-                <input
-                  placeholder="Nhập tên đăng nhập"
-                  value={registerForm.username}
-                  onChange={(e) => updateRegisterField('username', e.target.value)}
-                  onBlur={() => handleRegisterBlur('username')}
-                  className={registerTouched.username && registerErrors.username ? 'input-error' : ''}
-                  aria-invalid={Boolean(registerTouched.username && registerErrors.username)}
-                />
-                <small className={registerTouched.username && registerErrors.username ? 'helper helper-error' : 'helper'}>
-                  {helperText(registerTouched.username, registerErrors.username)}
-                </small>
-              </label>
-              <label className="field">
-                <span>Mật khẩu</span>
-                <input
-                  placeholder="Nhập mật khẩu"
-                  type="password"
-                  value={registerForm.password}
-                  onChange={(e) => updateRegisterField('password', e.target.value)}
-                  onBlur={() => handleRegisterBlur('password')}
-                  className={registerTouched.password && registerErrors.password ? 'input-error' : ''}
-                  aria-invalid={Boolean(registerTouched.password && registerErrors.password)}
-                />
-                <small className={registerTouched.password && registerErrors.password ? 'helper helper-error' : 'helper'}>
-                  {helperText(registerTouched.password, registerErrors.password)}
-                </small>
-              </label>
-              <label className="field">
-                <span>Vai trò</span>
-                <select value={registerForm.role} onChange={(e) => updateRegisterField('role', e.target.value)}>
-                  <option value="USER">Người dùng</option>
-                  <option value="ADMIN">Quản trị viên</option>
-                </select>
-              </label>
-              <button type="submit" disabled={registerSubmitting}>
-                {registerSubmitting && <span className="spinner" aria-hidden="true" />}
-                <span>{registerSubmitting ? 'Đang đăng ký...' : 'Đăng ký'}</span>
-              </button>
-              <p className={statusClass(registerStatusTone)}>{registerStatus || emptyLine}</p>
-            </form>
-          </section>
-        )}
-
+      <div className="auth-layout__forms auth-layout__forms--single">
         {!user ? (
           <section className="card stack form-card">
-            <h2>Đăng nhập</h2>
-            <p className="section-subtitle">Đăng nhập để đặt món và mô phỏng thanh toán.</p>
+            <header className="auth-header">
+              <h2>Đăng nhập</h2>
+              <p className="auth-header__subtitle">Nhập thông tin tài khoản để tiếp tục</p>
+            </header>
             <form className="stack" onSubmit={onLogin} noValidate>
               <label className="field">
                 <span>Tên đăng nhập</span>
                 <input
-                  placeholder="Nhập tên đăng nhập"
+                  placeholder="ten.dang.nhap"
                   value={loginForm.username}
                   onChange={(e) => updateLoginField('username', e.target.value)}
                   onBlur={() => handleLoginBlur('username')}
@@ -214,7 +111,7 @@ function LoginRegisterPage() {
               <label className="field">
                 <span>Mật khẩu</span>
                 <input
-                  placeholder="Nhập mật khẩu"
+                  placeholder="••••••••"
                   type="password"
                   value={loginForm.password}
                   onChange={(e) => updateLoginField('password', e.target.value)}
@@ -231,6 +128,12 @@ function LoginRegisterPage() {
                 <span>{loginSubmitting ? 'Đang đăng nhập...' : 'Đăng nhập'}</span>
               </button>
               <p className={statusClass(loginStatusTone)}>{loginStatus || emptyLine}</p>
+              
+              <footer className="form-footer" style={{ marginTop: '1rem', textAlign: 'center' }}>
+                <p className="section-subtitle">
+                  Chưa có tài khoản? <Link to="/register" style={{ color: 'var(--brand)', fontWeight: 600 }}>Đăng ký ngay</Link>
+                </p>
+              </footer>
             </form>
           </section>
         ) : (
@@ -257,4 +160,4 @@ function LoginRegisterPage() {
   );
 }
 
-export default LoginRegisterPage;
+export default LoginPage;

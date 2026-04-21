@@ -6,15 +6,17 @@ public class FoodResponse {
     private String name;
     private String description;
     private double price;
+    private String imageUrl;
 
     public FoodResponse() {
     }
 
-    public FoodResponse(Long id, String name, String description, double price) {
+    public FoodResponse(Long id, String name, String description, double price, String imageUrl) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {
@@ -47,5 +49,13 @@ public class FoodResponse {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
