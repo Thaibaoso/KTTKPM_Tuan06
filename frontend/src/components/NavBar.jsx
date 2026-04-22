@@ -7,22 +7,28 @@ function NavBar() {
   return (
     <nav className="nav">
       <strong className="brand-mark">Mini Food Ordering</strong>
-      <NavLink className={({ isActive }) => (isActive ? 'current' : '')} to="/auth">
-        Login/Register
-      </NavLink>
+      {!user && (
+        <NavLink className={({ isActive }) => (isActive ? 'current' : '')} to="/login">
+          Login
+        </NavLink>
+      )}
       <NavLink className={({ isActive }) => (isActive ? 'current' : '')} to="/foods">
-        Food List
+        Thực đơn
       </NavLink>
-      <NavLink className={({ isActive }) => (isActive ? 'current' : '')} to="/cart">
-        Cart
-      </NavLink>
-      <NavLink className={({ isActive }) => (isActive ? 'current' : '')} to="/checkout">
-        Checkout
-      </NavLink>
-      <span className="nav-spacer nav-user">{user ? `User: ${user.username}` : 'Not logged in'}</span>
+      {user?.role !== 'ADMIN' && (
+        <>
+          <NavLink className={({ isActive }) => (isActive ? 'current' : '')} to="/cart">
+            Giỏ hàng
+          </NavLink>
+          <NavLink className={({ isActive }) => (isActive ? 'current' : '')} to="/checkout">
+            Thanh toán
+          </NavLink>
+        </>
+      )}
+      <span className="nav-spacer nav-user">{user ? `Người dùng: ${user.username}` : 'Chưa đăng nhập'}</span>
       {user && (
         <button type="button" className="alt" onClick={logout}>
-          Logout
+          Đăng xuất
         </button>
       )}
     </nav>

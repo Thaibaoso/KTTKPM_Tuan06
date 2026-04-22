@@ -12,12 +12,12 @@ function CheckoutPage() {
 
   const placeOrder = async () => {
     if (!user) {
-      setMessage('Please login first.');
+      setMessage('Vui lòng đăng nhập trước khi thanh toán.');
       return;
     }
 
     if (items.length === 0) {
-      setMessage('Add items to cart before checkout.');
+      setMessage('Vui lòng thêm món ăn vào giỏ hàng.');
       return;
     }
 
@@ -40,10 +40,10 @@ function CheckoutPage() {
 
       clearCart();
       setMessage(
-        `${paymentResponse.data.message} Order #${orderId} is ${paymentResponse.data.status}.`
+        `${paymentResponse.data.message}. Đơn hàng #${orderId} đang ở trạng thái ${paymentResponse.data.status}.`
       );
     } catch (error) {
-      setMessage(error.response?.data?.error || 'Checkout failed');
+      setMessage(error.response?.data?.error || 'Thanh toán thất bại, vui lòng thử lại.');
     } finally {
       setProcessing(false);
     }
@@ -51,36 +51,35 @@ function CheckoutPage() {
 
   return (
     <div className="stack">
-      <section className="card hero compact">
-        <p className="eyebrow">Order Service + Payment Service</p>
-        <h1>Checkout</h1>
-        <p className="lede">Creates an order, then simulates payment and prints the notification.</p>
+      <section className="hero">
+        <h1>Hoàn Thành Đơn Hàng</h1>
+        <p className="lede">Hệ thống sẽ tạo đơn hàng và giả lập quy trình thanh toán để gửi thông báo đến bạn.</p>
       </section>
 
       <section className="card stack">
         <div className="row spread">
-          <span>Logged in as</span>
-          <strong>{user ? `${user.username} (${user.role})` : 'Guest'}</strong>
+          <span>Đang đăng nhập với</span>
+          <strong>{user ? `${user.username} (${user.role === 'ADMIN' ? 'Người quản trị' : 'Khách hàng'})` : 'Khách'}</strong>
         </div>
         <div className="row spread">
-          <span>Items</span>
-          <strong>{items.length}</strong>
+          <span>Số lượng món</span>
+          <strong>{items.length} món</strong>
         </div>
         <div className="row spread">
-          <span>Total</span>
-          <strong>${total.toFixed(2)}</strong>
+          <span>Tổng tiền</span>
+          <strong style={{ color: 'var(--brand)', fontSize: '1.25rem' }}>${total.toFixed(2)}</strong>
         </div>
 
-        <label className="stack">
-          <span>Payment Method</span>
+        <label className="field">
+          <span>Phương thức thanh toán</span>
           <select value={method} onChange={(event) => setMethod(event.target.value)}>
-            <option value="COD">COD</option>
-            <option value="Banking">Banking</option>
+            <option value="COD">Thanh toán khi nhận hàng (COD)</option>
+            <option value="Banking">Chuyển khoản ngân hàng</option>
           </select>
         </label>
 
         <button type="button" onClick={placeOrder} disabled={processing}>
-          {processing ? 'Processing...' : 'Create Order & Pay'}
+          {processing ? 'Đang xử lý...' : 'Đặt hàng & Thanh toán'}
         </button>
       </section>
 
